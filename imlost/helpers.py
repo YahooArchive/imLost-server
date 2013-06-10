@@ -5,7 +5,7 @@ from pyramid.response import Response
 import json
 import time
 
-USER_PUBLIC_FIELDS = ['_id', 'user_id', 'user_name', 'user_type', 'phone', 'last_seen', 'location']
+USER_PUBLIC_FIELDS = ['_id', 'user_id', 'user_name', 'user_type', 'phone', 'last_seen', 'location', 'device_type', 'device_token']
 
 class PermissionFailure(Exception):
     pass
