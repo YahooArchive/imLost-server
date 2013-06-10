@@ -5,6 +5,8 @@ from pyramid.response import Response
 import json
 import time
 
+USER_PUBLIC_FIELDS = ['_id', 'user_id', 'user_name', 'user_type', 'phone', 'last_seen', 'location']
+
 class PermissionFailure(Exception):
     pass
 
@@ -38,3 +40,6 @@ def encrypted_password(raw_password):
 def generate_token(id):
     h = hashlib.sha256("%s - %s - %s" % (SALT, id, time.time()))
     return h.hexdigest()
+
+def extract_public_info(user):
+    return dict([(k,v) for k,v in user.iteritems() if k in USER_PUBLIC_FIELDS])
