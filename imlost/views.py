@@ -70,6 +70,7 @@ def get_contacts(request):
         contacts = []
     else:
         for c in contacts:
+            c.pop('_id')
             if time.time() - c['last_seen'] < ONLINE_THRESHOLD:
                 c['online'] = True
             else:
@@ -100,15 +101,16 @@ def add_contact(request):
 def accept_contact(request):
     user = get_current_user(request)
     contact_id = request.params['contact_id'].lower()
-    if contact_id not in [c['contact_id'] for c in user['contacts']]:
+    if contact_id not in [c['user_id'] for c in user['contacts']]:
         return response_wrapper(400, 'No such contact')
     userdb = request.db['users']
     userdb.update({'_id':user['_id'], 'contacts.user_id':contact_id}, 
-                  {'$set':{'status':'accepted'}})
+                  {'$set':{'contacts.$.status':'accepted'}})
     user_data = extract_public_info(user)
     user_data['status'] = 'accepted'
+    print user_data
     userdb.update({'user_id':contact_id, 'contacts.user_id':user['user_id']}, 
-                  {'$set':user_data})
+                  {'$set':{'contacts.$':user_data}})
     return response_wrapper(200, 'OK')
 
 # @view_config(route_name='contacts', request_method='DELETE')

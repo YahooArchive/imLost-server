@@ -6,7 +6,7 @@ import json
 import time
 import hashlib
 
-USER_PUBLIC_FIELDS = ['_id', 'user_id', 'user_name', 'user_type', 'phone', 'last_seen', 'location', 'device_type', 'device_token']
+USER_PUBLIC_FIELDS = ['user_id', 'user_name', 'user_type', 'phone', 'last_seen', 'location', 'device_type', 'device_token']
 
 class PermissionFailure(Exception):
     pass
