@@ -1,7 +1,6 @@
 from pyramid.view import view_config
 from pyramid.paster import get_appsettings
 import pymongo
-import hashlib
 import time
 from applepushnotification import *
 
@@ -19,10 +18,10 @@ def no_permission(exc, request):
 @view_config(route_name='signup', request_method='POST')
 def signup(request):
     userdb = request.db['users']
-    new_user = dict([(k,v) for k,v in request.params if k in USER_FIELDS])
+    new_user = dict([(k,v) for k,v in request.params.items() if k in USER_FIELDS])
     if len(new_user) != len(USER_FIELDS):
         return response_wrapper(400, 'Required fields not provided')
-    if new_user['user_type'] not in USER_TYPE:
+    if new_user['user_type'] not in USER_TYPES:
         return response_wrapper(400, 'User type must be: caretaker or dependant')
     new_user['user_id'] = new_user['user_id'].lower()    
     # check if user exist
