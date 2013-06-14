@@ -4,6 +4,7 @@ from .common import *
 from pyramid.response import Response
 import json
 import time
+import hashlib
 
 USER_PUBLIC_FIELDS = ['_id', 'user_id', 'user_name', 'user_type', 'phone', 'last_seen', 'location', 'device_type', 'device_token']
 
@@ -15,7 +16,7 @@ def response_wrapper(status_code, message, result=None):
     data = {'status_code':status_code, 'message':message}
     if result is not None:
         data['result'] = result
-    resp.body = json.dump(data)
+    resp.body = json.dumps(data)
     return resp
 
 # being called everytime
@@ -29,7 +30,7 @@ def get_current_user(request):
             # update online time
             userdb.update({'_id':user['_id']}, {'$set':{'last_seen':time.time()}})
     else:
-        raise LoginFailure()
+        raise PermissionFailure()
     return user
 
 def encrypted_password(raw_password):
