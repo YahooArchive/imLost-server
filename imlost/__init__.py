@@ -27,6 +27,9 @@ def main(global_config, **settings):
     config.add_route('signin', '/signin')
     config.add_route('signup', '/signup')
     config.add_route('signout', '/signout')
+    config.add_route('contacts', '/contacts')
+    config.add_route('update_location', '/update_location')
+    config.add_route('imlost', '/imlost')
     config.scan()
     return config.make_wsgi_app()
 
