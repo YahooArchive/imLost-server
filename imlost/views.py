@@ -25,7 +25,7 @@ def signup(request):
         return response_wrapper(400, 'User type must be: caretaker or dependant')
     new_user['user_id'] = new_user['user_id'].lower()    
     # check if user exist
-    if userdb.find_one({'user_id':new_user['user_id']}) != None:
+    if userdb.find_one({'user_id':new_user['user_id']}) is not None:
         return response_wrapper(403, 'User already exists')
     # encrypt password
     new_user['password'] = encrypted_password(new_user['password'])
@@ -134,6 +134,7 @@ def i_am_lost(request):
     user = get_current_user(request)
     if user['user_type'] != 'dependant':
         return response_wrapper(400, 'You cannot be lost')
+    userdb = request.db['users']
     lng = request.params['lng']
     lat = request.params['lat']
     time_stamp = time.strftime('%H:%M:%S %D')
