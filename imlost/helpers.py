@@ -22,9 +22,10 @@ def response_wrapper(status_code, message, result=None):
 # being called everytime
 def get_current_user(request):
     userdb = request.db['users']
-    access_token = request.params['access_token']
+    access_token = request.matchdict['access_token']
+    print access_token
     if access_token is None:
-        raise LoginFailure()
+        raise PermissionFailure()
     user = userdb.find_one({'access_token':access_token})
     if user is not None:
             # update online time
