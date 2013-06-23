@@ -65,20 +65,21 @@ def signout(request):
 @view_config(route_name='user_profile', request_method='GET')
 def get_profile(request):
     user = get_current_user(request)
-    # TODO: filter out unwanted fields
+    for k in user.keys():
+        if k not in ['user_id','user_name','user_type','device_type','device_token','phone']:
+            user.pop(k)
     return response_wrapper(200, 'OK', {'user':user})
 
 @view_config(route_name='update_profile', request_method='PUT')
 def update_profile(request):
     user = get_current_user(request)
-    # TODO filter files and update database
     params = dict([(k,v) for k,v in request.params.iteritems() if k in CHANGEABLE_FIELDS])
     userdb = request.db['users']
     userdb.update({'_id':user['_id']}, {'$set':params})
     return response_wrapper(200, 'OK')
 
 @view_config(route_name='update_password', request_method='PUT')
-def update_profile(request):
+def update_password(request):
     user = get_current_user(request)
     old_password = request.params.get('old_password', None)
     new_password = request.params.get('new_password', None)
