@@ -70,7 +70,7 @@ def get_profile(request):
             user.pop(k)
     return response_wrapper(200, 'OK', {'user':user})
 
-@view_config(route_name='update_profile', request_method='PUT')
+@view_config(route_name='user_profile', request_method='PUT')
 def update_profile(request):
     user = get_current_user(request)
     params = dict([(k,v) for k,v in request.params.iteritems() if k in CHANGEABLE_FIELDS])
